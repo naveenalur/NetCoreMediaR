@@ -1,5 +1,6 @@
 ﻿using DataBase.Model;
 using MediatR;
+using MeditorDefinations.Command;
 using MeditorDefinations.Queries;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -35,20 +36,18 @@ namespace RestServices.Controllers
 
         // POST api/<PersonController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<Person> Post([FromBody] Person value)
         {
+            var model = new InsertPersonCommand(value.FirstName, value.LasttName);
+            return await mediator.Send(model);
         }
 
-        // PUT api/<PersonController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
 
         // DELETE api/<PersonController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task <Unit>Delete(int id)
         {
+            return await mediator.Send(new DeletePersonCommand(id));
         }
     }
 }
